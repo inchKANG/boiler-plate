@@ -4,10 +4,17 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const setting = require('./templete/setting.js')
-const mongoSetting = setting.mongoSetting
-
+const {mongoSetting} = require('./config/key')
+const {User} = require("./models/User")
 const mongoose =require('mongoose')
+const bodyParser = require('body-parser')
+
+console.log(mongoSetting)
+
+//for application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({extended:true}));
+//for application/json
+app.use(bodyParser.json());
 
 mongoose.connect(`mongodb://${mongoSetting.ip}/${mongoSetting.db}`,{
   useNewUrlParser:true,
@@ -24,6 +31,22 @@ app.get('/', (req, res) => {
   res.send('Hello Worsslddd!')
 })
 
+
+app.post('/register',(req,res)=>{
+  //회원가입할때 필요한 정보들을 클라이언트에서 가져오면 
+  //그것들을 데이터베이스에 넣어준다.
+  const user =new User(req.body)
+  // console.log(user);
+  user.save((err,doc)=>{
+    
+    if(err) return res.json({success:false,err})
+
+    return res.status(200).json({
+      success:true
+    })
+  })
+  
+})
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
