@@ -2,7 +2,7 @@
 //몽구스 설치 - npm install mongoose
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 5000;
 
 const { mongoSetting } = require("./config/key");
 const { User } = require("./models/User");
@@ -37,6 +37,10 @@ mongoose
 app.get("/", (req, res) => {
   res.send("Hello Worsslddd!");
 });
+
+app.get('/api/hello',(req,res)=>{
+  res.send("hello");
+})
 
 app.post("/api/users/register", (req, res) => {
   //회원가입할때 필요한 정보들을 클라이언트에서 가져오면
